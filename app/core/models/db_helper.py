@@ -9,9 +9,9 @@ class DBHelper:
         url: str,
         echo: bool,
         max_overflow: int,
-    ) -> None:
+    ):
         self.engine = create_async_engine(
-            url,
+            url=url,
             echo=echo,
             max_overflow=max_overflow,
         )

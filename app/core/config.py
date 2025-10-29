@@ -7,9 +7,7 @@ load_dotenv()
 
 
 class DBSettings(BaseModel):
-    url: str = os.getenv(
-        "DB_URL", "postgres://postgres:postgres@localhost:5432/postgres"
-    )
+    url: str = os.getenv("DB_URL")
     echo: bool = os.getenv("DB_ECHO", False)
     max_overflow: int = os.getenv("DB_MAX_OVERFLOW", 10)
 

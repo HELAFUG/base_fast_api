@@ -1,5 +1,5 @@
 from fastapi_users_db_sqlalchemy.access_token import (
-    SQLAlchemyAccessTokenTable,
+    SQLAlchemyAccessTokenDatabase,
     SQLAlchemyBaseAccessTokenTable,
 )
 from sqlalchemy.orm import Mapped, mapped_column
@@ -21,4 +21,4 @@ class AccessToken(Base, SQLAlchemyBaseAccessTokenTable):
 
     @classmethod
     def get_db(cls, session: "AsyncSession"):
-        return SQLAlchemyAccessTokenTable(session, cls)
+        return SQLAlchemyAccessTokenDatabase(session, cls)
