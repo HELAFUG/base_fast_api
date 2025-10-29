@@ -13,3 +13,6 @@ class User(Base, IdIntMixin, SQLAlchemyBaseUserTable[UserIdType]):
     @classmethod
     def get_db(cls, session: "AsyncSession"):
         return SQLAlchemyUserDatabase(session, cls)
+
+    def __str__(self):
+        return self.id
