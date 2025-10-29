@@ -12,6 +12,12 @@ class DBSettings(BaseModel):
     max_overflow: int = os.getenv("DB_MAX_OVERFLOW", 10)
 
 
+class AccessToken(BaseModel):
+    lifetime_secons: int = 3600
+    reset_password_token_secret: str = os.getenv("RESET_PASSWORD_TOKEN_SECRET")
+    verification_token_secret: str = os.getenv("VERIFICATION_TOKEN_SECRET")
+
+
 class SRVSettings(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8000
@@ -37,6 +43,7 @@ class Settings(BaseSettings):
     db: DBSettings = DBSettings()
     api: APISettings = APISettings()
     srv: SRVSettings = SRVSettings()
+    access_token: AccessToken = AccessToken()
 
 
 settings = Settings()
