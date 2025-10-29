@@ -4,7 +4,6 @@ from .api_v1 import api_v1_router
 
 router = APIRouter(
     prefix=settings.api.pretix,
-    tags=["API"],
 )
 
 router.include_router(router=api_v1_router)

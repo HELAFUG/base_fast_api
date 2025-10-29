@@ -26,6 +26,7 @@ class SRVSettings(BaseModel):
 class APIV1Settings(BaseModel):
     prefix: str = "/v1"
     auth: str = "/auth"
+    users: str = "/users"
 
 
 class APISettings(BaseModel):

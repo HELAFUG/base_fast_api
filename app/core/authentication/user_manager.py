@@ -1,5 +1,8 @@
 from fastapi import Depends
-from fastapi_users import BaseUserManager
+from fastapi_users import (
+    BaseUserManager,
+    IntegerIDMixin,
+)
 from typing import Optional
 from typing import TYPE_CHECKING
 from core.models import User
@@ -15,7 +18,7 @@ if TYPE_CHECKING:
 log = logging.getLogger(__name__)
 
 
-class UserManager(IdIntMixin, BaseUserManager[User, UserIdType]):
+class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
     reset_password_token_secret = settings.access_token.reset_password_token_secret
     verification_token_secret = settings.access_token.verification_token_secret
 
