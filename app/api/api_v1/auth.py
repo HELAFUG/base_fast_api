@@ -10,13 +10,14 @@ router = APIRouter(
 )
 
 router.include_router(
-    router=fastapi_users.get_auth_router(
-        authentication_backend,
-    )
-)
-router.include_router(
     router=fastapi_users.get_register_router(
         user_create_schema=UserCreate,
         user_schema=UserRead,
+    )
+)
+
+router.include_router(
+    router=fastapi_users.get_auth_router(
+        authentication_backend,
     )
 )
