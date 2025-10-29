@@ -15,4 +15,4 @@ if TYPE_CHECKING:
 async def get_access_tokens_db(
     session: Annotated["AsyncSession", Depends(db_helper.session_getter)],
 ):
-    return AccessToken.get_db(session)
+    yield AccessToken.get_db(session)
