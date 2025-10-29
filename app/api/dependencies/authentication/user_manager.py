@@ -1,6 +1,8 @@
 from fastapi import Depends
-from typing import Annotated
-from typing import TYPE_CHECKING
+from typing import (
+    TYPE_CHECKING,
+    Annotated,
+)
 from core.authentication.user_manager import UserManager
 from .users import get_users_db
 
