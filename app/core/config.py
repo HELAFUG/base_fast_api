@@ -5,26 +5,33 @@ import os
 
 load_dotenv()
 
+
 class DBSettings(BaseModel):
-    url:str = os.getenv("DB_URL", "postgres://postgres:postgres@localhost:5432/postgres")
-    echo:bool = os.getenv("DB_ECHO", False)
-    max_overflow:int = os.getenv("DB_MAX_OVERFLOW", 10)
+    url: str = os.getenv(
+        "DB_URL", "postgres://postgres:postgres@localhost:5432/postgres"
+    )
+    echo: bool = os.getenv("DB_ECHO", False)
+    max_overflow: int = os.getenv("DB_MAX_OVERFLOW", 10)
+
+
+class SRVSettings(BaseModel):
+    host: str = "0.0.0.0"
+    port: int = 8000
+
 
 class APIV1Settings(BaseModel):
-    prefix:str = "/v1"
+    prefix: str = "/v1"
 
 
 class APISettings(BaseModel):
-    pretix:str = "/api"
-    v1:APIV1Settings = APIV1Settings()
+    pretix: str = "/api"
+    v1: APIV1Settings = APIV1Settings()
 
-    
 
 class Settings(BaseSettings):
-    db:DBSettings = DBSettings()
-    api:APISettings = APISettings()
+    db: DBSettings = DBSettings()
+    api: APISettings = APISettings()
+    srv: SRVSettings = SRVSettings()
 
 
 settings = Settings()
-
-
