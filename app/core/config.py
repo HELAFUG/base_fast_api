@@ -8,7 +8,7 @@ load_dotenv()
 class DBSettings(BaseModel):
     url:str = os.getenv("DB_URL", "postgres://postgres:postgres@localhost:5432/postgres")
     echo:bool = os.getenv("DB_ECHO", False)
-    max_overflow:int = os.getenv("DB_MAX_OVERFLOW", 5)
+    max_overflow:int = os.getenv("DB_MAX_OVERFLOW", 10)
 
 class APIV1Settings(BaseModel):
     prefix:str = "/v1"
