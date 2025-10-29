@@ -1,8 +1,8 @@
-"""new table in access
+"""i forgot naming convention
 
-Revision ID: beba81c08480
+Revision ID: 34b54ae02acc
 Revises:
-Create Date: 2025-10-29 14:08:10.115192
+Create Date: 2025-10-29 18:16:05.958737
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "beba81c08480"
+revision: str = "34b54ae02acc"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -30,16 +30,25 @@ def upgrade() -> None:
         sa.Column("is_active", sa.Boolean(), nullable=False),
         sa.Column("is_superuser", sa.Boolean(), nullable=False),
         sa.Column("is_verified", sa.Boolean(), nullable=False),
-        sa.PrimaryKeyConstraint("id"),
+        sa.PrimaryKeyConstraint("id", name=op.f("pk_users")),
     )
     op.create_index(op.f("ix_users_email"), "users", ["email"], unique=True)
     op.create_table(
         "access_tokens",
         sa.Column("user_id", sa.Integer(), nullable=False),
         sa.Column("token", sa.String(length=43), nullable=False),
-        sa.Column("created_at", generics.TIMESTAMPAware(timezone=True), nullable=False),
-        sa.ForeignKeyConstraint(["user_id"], ["users.id"], ondelete="CASCADE"),
-        sa.PrimaryKeyConstraint("token"),
+        sa.Column(
+            "created_at",
+            generics.TIMESTAMPAware(timezone=True),
+            nullable=False,
+        ),
+        sa.ForeignKeyConstraint(
+            ["user_id"],
+            ["users.id"],
+            name=op.f("fk_access_tokens_user_id_users"),
+            ondelete="CASCADE",
+        ),
+        sa.PrimaryKeyConstraint("token", name=op.f("pk_access_tokens")),
     )
     op.create_index(
         op.f("ix_access_tokens_created_at"),
