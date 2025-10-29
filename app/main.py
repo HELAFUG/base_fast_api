@@ -9,7 +9,7 @@ import uvicorn
 @asynccontextmanager
 async def lifespan(app):
     yield
-    await db_helper.dispose
+    await db_helper.dispose()
 
 
 app = FastAPI(lifespan=lifespan)
