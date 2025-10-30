@@ -1,0 +1,1 @@
+-To solve path errors:export PYTHONPATH=/home/max/test/base_fast_api/app
