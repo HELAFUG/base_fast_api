@@ -28,3 +28,5 @@ router.include_router(
         user_schema=UserRead,
     )
 )
+
+router.include_router(router=fastapi_users.get_reset_password_router())
