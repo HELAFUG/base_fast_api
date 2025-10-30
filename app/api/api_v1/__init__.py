@@ -2,6 +2,7 @@ from fastapi import APIRouter
 from core.config import settings
 from .auth import router as auth_router
 from .user import router as user_router
+from .messages import router as messages_router
 
 api_v1_router = APIRouter(
     prefix=settings.api.v1.prefix,
@@ -9,3 +10,4 @@ api_v1_router = APIRouter(
 
 api_v1_router.include_router(router=auth_router)
 api_v1_router.include_router(router=user_router)
+api_v1_router.include_router(router=messages_router)
