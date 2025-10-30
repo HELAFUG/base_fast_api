@@ -21,3 +21,10 @@ router.include_router(
         authentication_backend,
     )
 )
+
+
+router.include_router(
+    router=fastapi_users.get_verify_router(
+        user_schema=UserRead,
+    )
+)

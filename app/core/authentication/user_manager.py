@@ -24,3 +24,11 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
 
     async def on_after_register(self, user: User, request: Optional["Request"] = None):
         log.warning("User %r has registered", user.id)
+
+    async def on_after_request_verify(
+        self,
+        user: User,
+        token: str,
+        request: Optional["Request"] = None,
+    ):
+        log.warning("Verification requested for user %r, token %r", user.id, token)
