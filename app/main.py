@@ -3,7 +3,9 @@ from contextlib import asynccontextmanager
 from core.config import settings
 from core.models import db_helper
 from api import router
-import uvicorn
+import logging
+
+logging.basicConfig(format=settings.logging.log_format)
 
 
 @asynccontextmanager
@@ -12,14 +14,6 @@ async def lifespan(app):
     await db_helper.dispose()
 
 
-app = FastAPI(lifespan=lifespan)
+main_app = FastAPI(lifespan=lifespan)
 
-app.include_router(router=router)
-
-if __name__ == "__main__":
-    uvicorn.run(
-        "main:app",
-        reload=True,
-        host=settings.srv.host,
-        port=settings.srv.port,
-    )
+main_app.include_router(router=router)

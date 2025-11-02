@@ -1,3 +1,4 @@
+from typing import Literal
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
@@ -7,6 +8,10 @@ import os
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+LOG_DEFAULT_FORMAT = (
+    "[%(asctime)s.%(msecs)03d] %(module)10s:%(lineno)-3d %(levelname)-7s - %(message)s"
+)
 
 
 class DBSettings(BaseModel):
@@ -31,7 +36,14 @@ class AccessToken(BaseModel):
 
 class SRVSettings(BaseModel):
     host: str = "0.0.0.0"
-    port: int = 8000
+    port: int = 8001
+    workers: int = 4
+    timeout: int = 900
+
+
+class LogSetting(BaseModel):
+    log_level: Literal["debug", "info", "warning", "error", "critical"] = "info"
+    log_format: str = LOG_DEFAULT_FORMAT
 
 
 class APIV1Settings(BaseModel):
@@ -57,6 +69,7 @@ class Settings(BaseSettings):
     api: APISettings = APISettings()
     srv: SRVSettings = SRVSettings()
     access_token: AccessToken = AccessToken()
+    logging: LogSetting = LogSetting()
 
 
 settings = Settings()
