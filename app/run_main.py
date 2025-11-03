@@ -14,7 +14,3 @@ def main():
             log_level=settings.logging.log_level,
         ),
     ).run()
-
-
-if __name__ == "__main__":
-    main()
