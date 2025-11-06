@@ -1,4 +1,4 @@
-from fastapi import Depends
+import logging
 from fastapi_users import (
     BaseUserManager,
     IntegerIDMixin,
@@ -8,8 +8,6 @@ from typing import TYPE_CHECKING
 from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
-from core.models.mixins import IdIntMixin
-import logging
 
 
 if TYPE_CHECKING:
