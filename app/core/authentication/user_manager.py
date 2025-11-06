@@ -9,6 +9,7 @@ from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
 from api.utils.mail import send_welcome_email
+from api.utils.passwords.forgot import send_verif_code
 
 if TYPE_CHECKING:
     from fastapi import Request
@@ -43,3 +44,4 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Forgot password requested for user %r, token %r", user.id, token)
+        await send_verif_code(user=user, token=token)
