@@ -15,10 +15,12 @@ from api.utils.user.verify import (
     send_verify_email,
     send_success_email,
 )
+from api.utils.user.login import send_login_email
 
 
 if TYPE_CHECKING:
     from fastapi import Request
+    from fastapi import Response
 
 log = logging.getLogger(__name__)
 
@@ -68,3 +70,12 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
     ):
         log.warning("Verification requested for user %r", user.id)
         await send_success_email(user=user)
+
+    async def on_after_login(
+        self,
+        user: User,
+        request: Optional["Request"] = None,
+        response: Optional["Response"] = None,
+    ):
+        log.warning("Login requested for user %r", user.id)
+        await send_login_email(user=user)
