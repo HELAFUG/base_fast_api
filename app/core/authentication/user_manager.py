@@ -8,7 +8,7 @@ from fastapi_users import (
 from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
-
+from api.utils.mail import send_welcome_email
 
 if TYPE_CHECKING:
     from fastapi import Request
@@ -26,6 +26,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("User registered %r", user.id)
+        await send_welcome_email(user)
 
     async def on_after_request_verify(
         self,
