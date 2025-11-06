@@ -9,8 +9,12 @@ from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
 from api.utils.mail import send_welcome_email
-from api.utils.passwords.forgot import send_verif_code
-from api.utils.passwords.reset import send_reset_email
+from api.utils.passwords.forgot import send_password_forgot_email
+from api.utils.passwords.reset import send_reset_password_email
+from api.utils.user.verify import (
+    send_verify_email,
+    send_success_email,
+)
 
 
 if TYPE_CHECKING:
@@ -38,6 +42,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Verification requested for user %r, token %r", user.id, token)
+        await send_verify_email(user=user, token=token)
 
     async def on_after_forgot_password(
         self,
@@ -46,7 +51,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Forgot password requested for user %r", user.id)
-        await send_verif_code(user=user, token=token)
+        await send_password_forgot_email(user=user, token=token)
 
     async def on_after_reset_password(
         self,
@@ -54,4 +59,12 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Reset password requested for user %r", user.id)
-        await send_reset_email(user=user)
+        await send_reset_password_email(user=user)
+
+    async def on_after_verify(
+        self,
+        user: User,
+        request: Optional["Request"] = None,
+    ):
+        log.warning("Verification requested for user %r", user.id)
+        await send_success_email(user=user)
