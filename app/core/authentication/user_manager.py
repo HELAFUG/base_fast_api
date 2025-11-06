@@ -1,15 +1,13 @@
-from fastapi import Depends
+import logging
+from typing import TYPE_CHECKING
+from typing import Optional
 from fastapi_users import (
     BaseUserManager,
     IntegerIDMixin,
 )
-from typing import Optional
-from typing import TYPE_CHECKING
 from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
-from core.models.mixins import IdIntMixin
-import logging
 
 
 if TYPE_CHECKING:
@@ -27,7 +25,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         user: User,
         request: Optional["Request"] = None,
     ):
-        log.warning("User %r has registered", user.id)
+        log.warning("User registered %r", user.id)
 
     async def on_after_request_verify(
         self,
