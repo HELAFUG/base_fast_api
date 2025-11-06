@@ -36,7 +36,7 @@ class AccessToken(BaseModel):
 
 class SRVSettings(BaseModel):
     host: str = "0.0.0.0"
-    port: int = 8001
+    port: int = 8000
     workers: int = 4
     timeout: int = 900
 
