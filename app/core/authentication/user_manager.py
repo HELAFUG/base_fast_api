@@ -9,7 +9,7 @@ from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
 from api.utils.mail.welcome import welcome_email
-from api.utils.user.verify import verify_email
+from api.utils.user.verify import verify_email, after_verify
 
 
 if TYPE_CHECKING:
@@ -38,6 +38,14 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
     ):
         log.warning("Verification requested for user %r", user.id)
         await verify_email(user, token)
+
+    async def on_after_verify(
+        self,
+        user: User,
+        request: Optional["Request"] = None,
+    ):
+        log.warning("User %r has been verified", user.id)
+        await after_verify(user)
 
     async def on_after_forgot_password(
         self,
