@@ -8,3 +8,11 @@ async def verify_email(user: User, token: str):
         sub="Verification Token Inside, Please Be Cautious",
         body=token,
     )
+
+
+async def after_verify(user: User):
+    await send_email(
+        recepient=user.email,
+        sub="Account Verified Process",
+        body="Your account has been verified",
+    )
