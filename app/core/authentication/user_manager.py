@@ -43,3 +43,5 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Forgot password requested for user %r, token %r", user.id, token)
+
+    # TODO: make this work
