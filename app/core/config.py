@@ -58,6 +58,8 @@ class RabbitMQSetting(BaseModel):
     port: int = os.getenv("RABBITMQ_PORT", 5672)
     user: str = os.getenv("RABBITMQ_USER", "guest")
     password: str = os.getenv("RABBITMQ_PASSWORD", "guest")
+    exchange: str = ""
+    routing_key: str = "authorization"
 
 
 class APISettings(BaseModel):
