@@ -53,6 +53,13 @@ class APIV1Settings(BaseModel):
     messages: str = "/messages"
 
 
+class RabbitMQSetting(BaseModel):
+    host: str = os.getenv("RABBITMQ_HOST", "localhost")
+    port: int = os.getenv("RABBITMQ_PORT", 5672)
+    user: str = os.getenv("RABBITMQ_USER", "guest")
+    password: str = os.getenv("RABBITMQ_PASSWORD", "guest")
+
+
 class APISettings(BaseModel):
     pretix: str = "/api"
     v1: APIV1Settings = APIV1Settings()
@@ -70,6 +77,7 @@ class Settings(BaseSettings):
     srv: SRVSettings = SRVSettings()
     access_token: AccessToken = AccessToken()
     logging: LogSetting = LogSetting()
+    rabbitmq: RabbitMQSetting = RabbitMQSetting()
 
 
 settings = Settings()
