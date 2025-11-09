@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
 from run_main import main
+from core.rabbit import configurate_logger, get_connection
 
 if __name__ == "__main__":
+    get_connection()
+    configurate_logger()
     main()
