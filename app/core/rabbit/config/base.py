@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 import pika
+from pika.adapters.blocking_connection import BlockingChannel
 from .exc import RabbitException
 
 
@@ -7,13 +8,13 @@ class RabbitBase:
     def __init__(self, conn_params: pika.ConnectionParameters) -> None:
         self.connection_params = conn_params
         self._connection: pika.BlockingConnection = pika.BlockingConnection()
-        self._channel: pika.BlockingChannel | None = None
+        self._channel: BlockingChannel | None = None
 
     def get_connection(self) -> pika.BlockingConnection:
         return self._connection
 
     @property
-    def channel(self) -> pika.BlockingChannel:
+    def channel(self) -> BlockingChannel:
         if self._channel is None:
             raise RabbitException("No channel yet")
         return self._channel
