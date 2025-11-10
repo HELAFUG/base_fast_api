@@ -1,10 +1,14 @@
-from typing import TYPE_CHECKING
+import logging
+from typing import TYPE_CHECKING, Callable
 from pika.exchange_type import ExchangeType
 from core import config
 
 
 if TYPE_CHECKING:
     from pika.adapters.blocking_connection import BlockingChannel
+    from pika.spec import Basic, BasicProperties
+
+log = logging.getLogger(__name__)
 
 
 class EmailUpdatesRabbitMixin:
@@ -35,3 +39,30 @@ class EmailUpdatesRabbitMixin:
         )
 
         return q_name
+
+    def consume_message(
+        self,
+        on_message_callback: Callable[
+            [
+                "BlockingChannel",
+                "Basic.Deliver",
+                "BasicProperties",
+                bytes,
+            ],
+            None,
+        ] = None,
+        pre_count: int = 1,
+        queue_name: str = "",
+    ):
+        self.channel.basic_qos(prefetch_count=pre_count)
+        self.channel.basic_consume(
+            queue=queue_name,
+            on_message_callback=on_message_callback,
+            auto_ack=True,
+        )
+        log.warning("Waiting for messages. To exit press CTRL+C")
+        self.channel.start_consuming()
+
+
+class EmailRabbitUpdates(EmailUpdatesRabbitMixin):
+    pass
