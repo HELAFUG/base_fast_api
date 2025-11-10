@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 import logging
 import pika
-from core.rabbit.config.cofnig import get_connection, configurate_logger
+from app.core.rabbit.config.config import get_connection, configurate_logger
 from core.config import settings
 
 log = logging.getLogger(__name__)

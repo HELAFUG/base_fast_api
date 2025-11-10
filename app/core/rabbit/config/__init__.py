@@ -4,4 +4,4 @@ __all__ = (
 )
 
 from .base import RabbitBase
-from .cofnig import configurate_logger
+from .config import configurate_logger

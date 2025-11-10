@@ -3,4 +3,4 @@ __all__ = (
     "configurate_logger",
 )
 
-from .config.cofnig import configurate_logger, get_connection
+from .config.config import configurate_logger, get_connection
