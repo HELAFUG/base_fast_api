@@ -1,5 +1,5 @@
 from datetime import datetime
-from api.utils.mail.send_email import send_email
+from mail.send_email import send_email
 from core.models import User
 
 

@@ -8,14 +8,14 @@ from fastapi_users import (
 from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
-from api.utils.mail import send_welcome_email
-from api.utils.passwords.forgot import send_password_forgot_email
-from api.utils.passwords.reset import send_reset_password_email
-from api.utils.user.verify import (
+from api.mailing.mail import send_welcome_email
+from api.mailing.passwords.forgot import send_password_forgot_email
+from api.mailing.passwords.reset import send_reset_password_email
+from api.mailing.user.verify import (
     send_verify_email,
     send_success_email,
 )
-from api.utils.user.login import send_login_email
+from api.mailing.user.login import send_login_email
 
 
 if TYPE_CHECKING:
