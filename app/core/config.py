@@ -64,8 +64,8 @@ class APISettings(BaseModel):
         return path.removeprefix("/")
 
 
-class RabbitSettings(BaseModel):
-    url: str = os.getenv("RABBIT_URL", "amqp://guest:guest@localhost:5672//")
+class TaskIQConfig(BaseModel):
+    url: str = os.getenv("TASKIQ_URL", "amqp://guest:guest@localhost:5672//")
 
 
 class Settings(BaseSettings):
@@ -74,7 +74,7 @@ class Settings(BaseSettings):
     srv: SRVSettings = SRVSettings()
     access_token: AccessToken = AccessToken()
     logging: LogSetting = LogSetting()
-    rabbit: RabbitSettings = RabbitSettings()
+    taskiq: TaskIQConfig = TaskIQConfig()
 
 
 settings = Settings()
