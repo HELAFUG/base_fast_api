@@ -64,12 +64,17 @@ class APISettings(BaseModel):
         return path.removeprefix("/")
 
 
+class RabbitSettings(BaseModel):
+    url: str = os.getenv("RABBIT_URL", "amqp://guest:guest@localhost:5672/%2F")
+
+
 class Settings(BaseSettings):
     db: DBSettings = DBSettings()
     api: APISettings = APISettings()
     srv: SRVSettings = SRVSettings()
     access_token: AccessToken = AccessToken()
     logging: LogSetting = LogSetting()
+    rabbit: RabbitSettings = RabbitSettings()
 
 
 settings = Settings()
