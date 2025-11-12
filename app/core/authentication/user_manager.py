@@ -8,7 +8,7 @@ from fastapi_users import (
 from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
-from mailing.mail import send_welcome_email
+from tasks import welcome_email_notification
 from mailing.passwords.forgot import send_password_forgot_email
 from mailing.passwords.reset import send_reset_password_email
 from mailing.user.verify import (
@@ -35,7 +35,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("User registered %r", user.id)
-        await send_welcome_email(user)
+        await welcome_email_notification.kiq(user.id)
 
     async def on_after_request_verify(
         self,
