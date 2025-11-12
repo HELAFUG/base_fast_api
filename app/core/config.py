@@ -65,7 +65,7 @@ class APISettings(BaseModel):
 
 
 class RabbitSettings(BaseModel):
-    url: str = os.getenv("RABBIT_URL", "amqp://guest:guest@localhost:5672/%2F")
+    url: str = os.getenv("RABBIT_URL", "amqp://guest:guest@localhost:5672//")
 
 
 class Settings(BaseSettings):
