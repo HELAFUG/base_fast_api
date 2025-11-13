@@ -11,10 +11,12 @@ logging.basicConfig(format=settings.logging.log_format)
 
 @asynccontextmanager
 async def lifespan(app):
-    await broker.startup()
+    if not broker.is_worker_process:
+        await broker.startup()
     yield
     await db_helper.dispose()
-    await broker.shutdown()
+    if not broker.is_worker_process:
+        await broker.shutdown()
 
 
 main_app = FastAPI(lifespan=lifespan)
