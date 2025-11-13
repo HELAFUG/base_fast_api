@@ -3,6 +3,7 @@ import logging
 import pika
 from app.core.rabbit.config.config import get_connection, configurate_logger
 from core.config import settings
+from core.rabbit.common.email_updates import EmailRabbitUpdates
 
 log = logging.getLogger(__name__)
 
@@ -27,14 +28,12 @@ def consume_message(channel: "BlockingChannel"):
     channel.basic_consume(
         queue=settings.rabbitmq.queue,
         on_message_callback=process_new_message,
-        auto_ack=True,
+        # auto_ack=True,
     )
     log.warning("Waiting for messages. To exit press CTRL+C")
     channel.start_consuming()
 
 
-def consumer_main(conn):
-    with conn() as connection:
-        log.info("Connected to %s", connection)
-        with connection.channel() as channel:
-            consume_message(channel)
+def consumer_main():
+    with EmailRabbitUpdates() as rabbit:
+        consume_message(rabbit.channel)
