@@ -1,13 +1,17 @@
 __all__ = ("broker",)
 
 import logging
+
 from taskiq import TaskiqEvents, TaskiqState
+import taskiq_fastapi
 from taskiq_aio_pika import AioPikaBroker
 from core.config import settings
 
 log = logging.getLogger(__name__)
 
 broker = AioPikaBroker(url=settings.taskiq.url)
+
+taskiq_fastapi.init(broker=broker, app_or_path="main:main_app")
 
 
 @broker.on_event(TaskiqEvents.WORKER_STARTUP)
