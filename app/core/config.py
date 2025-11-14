@@ -9,9 +9,7 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-LOG_DEFAULT_FORMAT = (
-    "[%(asctime)s.%(msecs)03d] %(module)10s:%(lineno)-3d %(levelname)-7s - %(message)s"
-)
+LOG_DEFAULT_FORMAT = "[%(asctime)s.%(msecs)03d][%(processName)s] %(module)16s:%(lineno)-3d %(levelname)-7s - %(message)s"
 
 
 class DBSettings(BaseModel):
@@ -42,8 +40,9 @@ class SRVSettings(BaseModel):
 
 
 class LogSetting(BaseModel):
-    log_level: Literal["debug", "info", "warning", "error", "critical"] = "info"
+    log_level: str = "INFO"
     log_format: str = LOG_DEFAULT_FORMAT
+    datefmt: str = "%Y-%m-%d %H:%M:%S"
 
 
 class APIV1Settings(BaseModel):
