@@ -8,7 +8,11 @@ from fastapi_users import (
 from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
-from tasks import welcome_email_notification
+from tasks import (
+    welcome_email_notification,
+    send_after_forgot,
+    send_after_reset,
+)
 from mailing.passwords.forgot import send_password_forgot_email
 from mailing.passwords.reset import send_reset_password_email
 from mailing.user.verify import (
@@ -53,7 +57,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Forgot password requested for user %r", user.id)
-        await send_password_forgot_email(user=user, token=token)
+        await send_after_forgot.kiq(user.id, token)
 
     async def on_after_reset_password(
         self,
