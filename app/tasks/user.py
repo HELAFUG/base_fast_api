@@ -22,7 +22,7 @@ async def send_after_login(
 
 
 @broker.task
-async def send_after_verify(
+async def send_after_verify_req(
     user_id: int,
     token: str,
     session: Annotated[AsyncSession, TaskiqDepends(db_helper.session_getter)],

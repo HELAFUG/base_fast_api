@@ -12,9 +12,10 @@ from tasks import (
     welcome_email_notification,
     send_after_forgot,
     send_after_reset,
+    send_after_login,
+    send_after_verify_req,
+    on_after_success,
 )
-from mailing.passwords.forgot import send_password_forgot_email
-from mailing.passwords.reset import send_reset_password_email
 from mailing.user.verify import (
     send_verify_email,
     send_success_email,
@@ -48,7 +49,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Verification requested for user %r, token %r", user.id, token)
-        await send_verify_email(user=user, token=token)
+        await send_after_verify_req.kiq(user.id, token)
 
     async def on_after_forgot_password(
         self,
@@ -73,7 +74,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Verification requested for user %r", user.id)
-        await send_success_email(user=user)
+        await on_after_success.kiq(user.id)
 
     async def on_after_login(
         self,
@@ -82,4 +83,4 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         response: Optional["Response"] = None,
     ):
         log.warning("Login requested for user %r", user.id)
-        await send_login_email(user=user)
+        await send_after_login.kiq(user.id)

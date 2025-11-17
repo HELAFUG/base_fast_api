@@ -5,7 +5,7 @@ from core.models import User
 async def send_verify_email(user: User, token: str):
     await send_email(
         recipient=user.email,
-        sub="Verification Token,Warning Dont Share",
+        sub="Verification Token Inside,Warning Dont Share",
         body=token,
     )
 
