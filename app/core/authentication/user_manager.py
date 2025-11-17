@@ -65,7 +65,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Reset password requested for user %r", user.id)
-        await send_reset_password_email(user=user)
+        await send_after_reset.kiq(user.id)
 
     async def on_after_verify(
         self,
