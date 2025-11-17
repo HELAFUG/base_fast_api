@@ -32,6 +32,25 @@ class AccessToken(BaseModel):
     verification_token_secret: str = os.getenv("VERIFICATION_TOKEN_SECRET")
 
 
+class RedisDB(BaseModel):
+    cache: int = 0
+
+
+class RedisSettings(BaseModel):
+    host: str = "0.0.0.0"
+    port: int = 16379
+    db: RedisDB = RedisDB()
+
+
+class CacheNameSpace(BaseModel):
+    users_list: str = "users-list"
+
+
+class CacheSettings(BaseModel):
+    prefix: str = "fastapi-cache"
+    name_space: CacheNameSpace = CacheNameSpace()
+
+
 class SRVSettings(BaseModel):
     host: str = "0.0.0.0"
     port: int = 8000
@@ -74,6 +93,8 @@ class Settings(BaseSettings):
     access_token: AccessToken = AccessToken()
     logging: LogSetting = LogSetting()
     taskiq: TaskIQConfig = TaskIQConfig()
+    redis: RedisSettings = RedisSettings()
+    cache: CacheSettings = CacheSettings()
 
 
 settings = Settings()
