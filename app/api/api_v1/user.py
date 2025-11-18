@@ -3,6 +3,7 @@ from fastapi import (
     Depends,
 )
 from fastapi.security import HTTPBearer
+from fastapi_cache.decorator import cache
 from typing import Annotated, TYPE_CHECKING
 from core.config import settings
 from core.schemas.user import UserRead, UserUpdate
@@ -21,7 +22,8 @@ router = APIRouter(
 )
 
 
-@router.get("sex", response_model=list[UserRead])
+@router.get("", response_model=list[UserRead])
+@cache(expire=60)
 async def get_all(users_db: Annotated["SQLAlchemyUserDatabase", Depends(get_users_db)]):
     return await users_db.get_users()
 
