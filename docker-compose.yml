@@ -49,10 +49,7 @@ services:
     ports:
       - "16379:6379"
 
-    environment:
-      - REDIS_USER="max"
-      - REDIS_PASSWORD="qwe"
-    command: ["redis-server", "--requirepass", "qwe"]
+    
 
 
 volumes:
