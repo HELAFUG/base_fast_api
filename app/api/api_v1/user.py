@@ -55,7 +55,8 @@ def users_list_key_builder(
     namespace=settings.cache.name_space.users_list,
 )
 async def get_all(users_db: Annotated["SQLAlchemyUserDatabase", Depends(get_users_db)]):
-    return await users_db.get_users()
+    users = await users_db.get_users()
+    return [UserRead.model_validate(user) for user in users]
 
 
 router.include_router(
