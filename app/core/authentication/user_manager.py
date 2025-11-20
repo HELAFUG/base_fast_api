@@ -6,6 +6,7 @@ from fastapi_users import (
     IntegerIDMixin,
 )
 from fastapi_cache import FastAPICache
+from core.config import settings
 from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
@@ -44,9 +45,13 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         self,
         user: User,
         request: Optional["Request"] = None,
-        back_tasks: Optional["BackgroundTasks"] = None,
     ):
-
+        if self.background_tasks:
+            self.background_tasks.add_task(
+                FastAPICache.clear(namespace=settings.cache.name_space.users_list)
+            )
+        else:
+            await FastAPICache.clear(namespace=settings.cache.name_space.users_list)
         log.warning("User registered %r", user.id)
         await welcome_email_notification.kiq(user.id)
 
