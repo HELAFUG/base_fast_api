@@ -5,6 +5,7 @@ from fastapi_users import (
     BaseUserManager,
     IntegerIDMixin,
 )
+from fastapi_cache import FastAPICache
 from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
@@ -16,16 +17,12 @@ from tasks import (
     send_after_verify_req,
     on_after_success,
 )
-from mailing.user.verify import (
-    send_verify_email,
-    send_success_email,
-)
-from mailing.user.login import send_login_email
 
 
 if TYPE_CHECKING:
     from fastapi import Request
     from fastapi import Response
+    from fastapi import BackgroundTasks
 
 log = logging.getLogger(__name__)
 
@@ -34,11 +31,22 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
     reset_password_token_secret = settings.access_token.reset_password_token_secret
     verification_token_secret = settings.access_token.verification_token_secret
 
+    def __init__(
+        self,
+        user_db,
+        password_hasher=None,
+        background_tasks: Optional["BackgroundTasks"] = None,
+    ):
+        super().__init__(user_db, password_hasher)
+        self.background_tasks = background_tasks
+
     async def on_after_register(
         self,
         user: User,
         request: Optional["Request"] = None,
+        back_tasks: Optional["BackgroundTasks"] = None,
     ):
+
         log.warning("User registered %r", user.id)
         await welcome_email_notification.kiq(user.id)
 
