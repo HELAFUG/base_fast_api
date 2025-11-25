@@ -9,9 +9,7 @@ load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-LOG_DEFAULT_FORMAT = (
-    "[%(asctime)s.%(msecs)03d] %(module)10s:%(lineno)-3d %(levelname)-7s - %(message)s"
-)
+LOG_DEFAULT_FORMAT = "[%(asctime)s.%(msecs)03d][%(processName)s] %(module)16s:%(lineno)-3d %(levelname)-7s - %(message)s"
 
 
 class DBSettings(BaseModel):
@@ -34,16 +32,36 @@ class AccessToken(BaseModel):
     verification_token_secret: str = os.getenv("VERIFICATION_TOKEN_SECRET")
 
 
+class RedisDB(BaseModel):
+    cache: int = 0
+
+
+class RedisSettings(BaseModel):
+    host: str = "0.0.0.0"
+    port: int = 16379
+    db: RedisDB = RedisDB()
+
+
+class CacheNameSpace(BaseModel):
+    users_list: str = "users-list"
+
+
+class CacheSettings(BaseModel):
+    prefix: str = "fastapi-cache"
+    name_space: CacheNameSpace = CacheNameSpace()
+
+
 class SRVSettings(BaseModel):
     host: str = "0.0.0.0"
-    port: int = 8001
+    port: int = 8000
     workers: int = 4
     timeout: int = 900
 
 
 class LogSetting(BaseModel):
-    log_level: Literal["debug", "info", "warning", "error", "critical"] = "info"
+    log_level: str = "INFO"
     log_format: str = LOG_DEFAULT_FORMAT
+    datefmt: str = "%Y-%m-%d %H:%M:%S"
 
 
 class APIV1Settings(BaseModel):
@@ -64,12 +82,19 @@ class APISettings(BaseModel):
         return path.removeprefix("/")
 
 
+class TaskIQConfig(BaseModel):
+    url: str = os.getenv("TASKIQ_URL", "amqp://guest:guest@localhost:5672//")
+
+
 class Settings(BaseSettings):
     db: DBSettings = DBSettings()
     api: APISettings = APISettings()
     srv: SRVSettings = SRVSettings()
     access_token: AccessToken = AccessToken()
     logging: LogSetting = LogSetting()
+    taskiq: TaskIQConfig = TaskIQConfig()
+    redis: RedisSettings = RedisSettings()
+    cache: CacheSettings = CacheSettings()
 
 
 settings = Settings()

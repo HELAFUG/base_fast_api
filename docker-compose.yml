@@ -12,5 +12,46 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql
 
+
+  maildev:
+    image: maildev/maildev
+    environment:
+      - TZ=Europe/Moscow
+      - MAILDEV_SMTP_PORT=1025
+      - MAILDEV_WEB_PORT=1080
+    ports:
+      - 8080:1080
+      - 1025:1025
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+
+
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+
+  redis:
+    image: redis:latest
+    container_name: base_fastapi_redis
+    ports:
+      - "16379:6379"
+
+    
+
+
 volumes:
   postgres_data:
+  rabbitmq_data:

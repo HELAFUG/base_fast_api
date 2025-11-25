@@ -1,8 +1,8 @@
-"""i forgot naming convention
+"""whats new all ?
 
-Revision ID: 34b54ae02acc
+Revision ID: e067c2a9795c
 Revises:
-Create Date: 2025-10-29 18:16:05.958737
+Create Date: 2025-11-18 15:11:50.470805
 
 """
 
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = "34b54ae02acc"
+revision: str = "e067c2a9795c"
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
