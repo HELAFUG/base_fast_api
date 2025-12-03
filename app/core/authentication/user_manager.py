@@ -10,14 +10,6 @@ from core.config import settings
 from core.models import User
 from core.types.user_id import UserIdType
 from core.config import settings
-from tasks import (
-    welcome_email_notification,
-    send_after_forgot,
-    send_after_reset,
-    send_after_login,
-    send_after_verify_req,
-    on_after_success,
-)
 
 
 if TYPE_CHECKING:
@@ -52,8 +44,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
             )
         else:
             await FastAPICache.clear(namespace=settings.cache.name_space.users_list)
-        log.warning("User registered %r", user.id)
-        await welcome_email_notification.kiq(user.id)
 
     async def on_after_request_verify(
         self,
@@ -62,7 +52,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Verification requested for user %r, token %r", user.id, token)
-        await send_after_verify_req.kiq(user.id, token)
 
     async def on_after_forgot_password(
         self,
@@ -71,7 +60,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Forgot password requested for user %r", user.id)
-        await send_after_forgot.kiq(user.id, token)
 
     async def on_after_reset_password(
         self,
@@ -79,7 +67,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Reset password requested for user %r", user.id)
-        await send_after_reset.kiq(user.id)
 
     async def on_after_verify(
         self,
@@ -87,7 +74,6 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         request: Optional["Request"] = None,
     ):
         log.warning("Verification requested for user %r", user.id)
-        await on_after_success.kiq(user.id)
 
     async def on_after_login(
         self,
@@ -96,4 +82,3 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, UserIdType]):
         response: Optional["Response"] = None,
     ):
         log.warning("Login requested for user %r", user.id)
-        await send_after_login.kiq(user.id)
