@@ -8,7 +8,7 @@ from core.models import User
 from core.authentication.user_manager import UserManager
 from core.schemas.user import UserCreate
 from core.models import db_helper
-
+from tasks import welcome_email_notification
 
 get_users_db_context = contextlib.asynccontextmanager(get_users_db)
 get_user_manager_context = contextlib.asynccontextmanager(get_user_manager)
@@ -47,6 +47,7 @@ async def create_superuser(
     async with db_helper.session_factory() as session:
         async with get_users_db_context(session) as users_db:
             async with get_user_manager_context(users_db) as user_manager:
+                await welcome_email_notification.kiq(user_create.id)
                 return await create_user(user_manager, user_create)
 
 
